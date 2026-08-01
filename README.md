@@ -370,7 +370,7 @@ python generate_triple_model+eval/eval_new.py
 
 ## 🖥️ Running the Interactive Web Demo App
 
-![Interactive Web Demo](./HybridRKG_Demo.png)
+![Interactive Web Demo](./BioRE-KG.png)
 
 The demo app provides a visually rich dashboard to input a sentence, retrieve structured 1-hop facts, score and rank them, and extract relation triples via an LLM.
 
