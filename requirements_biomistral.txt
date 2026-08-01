@@ -1,0 +1,29 @@
+# ============================================================
+# requirements_biomistral.txt
+# ============================================================
+# Môi trường chạy huấn luyện (SFT) cho BioMistral-7B
+# Phù hợp cho môi trường CUDA 11.8 trên máy chủ của bạn.
+# ============================================================
+
+# Core ML (CUDA 11.8 Build)
+torch==2.0.1+cu118 --extra-index-url https://download.pytorch.org/whl/cu118
+torchaudio==2.0.2+cu118 --extra-index-url https://download.pytorch.org/whl/cu118
+torchvision==0.15.2+cu118 --extra-index-url https://download.pytorch.org/whl/cu118
+
+# HuggingFace Stack (Bản mới hỗ trợ cấu hình Mistral & SFTConfig)
+transformers==4.46.3
+datasets==3.1.0
+accelerate==1.0.1
+peft==0.4.0
+trl==0.11.4
+
+# Lượng hóa & Triton
+bitsandbytes==0.41.3.post2
+triton==2.0.0
+
+# Phụ trợ & Tiện ích
+sentencepiece==0.2.0
+scipy==1.10.1
+numpy==1.24.3
+pandas==2.0.3
+rich==14.3.4

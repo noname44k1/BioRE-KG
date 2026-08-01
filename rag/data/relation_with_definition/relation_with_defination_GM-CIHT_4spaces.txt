@@ -1,0 +1,22 @@
+PRECEDES    occurs before or precedes another event  
+PREDISPOSES    increases risk or susceptibility to a condition  
+TREATS    treats or cures a condition  
+AFFECTS    affects or modifies another entity  
+INTERACTS_WITH    directly interacts with another entity  
+INHIBITS    inhibits or blocks another entity  
+PRODUCES    produces or generates another entity  
+ADMINISTERED_TO    is administered to a patient or subject  
+PROCESS_OF    is a process of another entity  
+AUGMENTS    augments or enhances another entity  
+PREVENTS    prevents or stops another condition  
+DIAGNOSES    diagnoses or identifies a condition  
+COEXISTS_WITH    co-occurs or co-exists with another entity  
+ASSOCIATED_WITH    statistically or clinically associated with  
+DISRUPTS    disrupts or interferes with normal function  
+CAUSES    causes or brings about another condition  
+COMPLICATES    complicates or adds complications to  
+SYMPTOM_OF    is a symptom or manifestation of  
+DOES_NOT_TREAT    does not treat or is ineffective against  
+STIMULATES    stimulates or activates another entity  
+MANIFESTATION_OF    is a manifestation of another condition  
+USES    uses or employs another entity

@@ -1,0 +1,5 @@
+mechanism    pharmacokinetic mechanism of drug-drug interaction
+effect    pharmacodynamic effect or clinical consequence of a drug interaction
+advise    recommendation or advice regarding the concurrent use of two drugs
+int    a drug-drug interaction without detailed mechanism or effect specified
+None    no interaction between the two drugs

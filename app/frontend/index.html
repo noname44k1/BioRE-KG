@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BioHybridKG — Biomedical Relation Extraction</title>
+  <meta name="description" content="Interactive demo for BioHybridKG: a hybrid Knowledge Graph + RAG system for biomedical relation triple extraction.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ═══ SIDEBAR ═══ -->
+  <aside class="sidebar" id="sidebar">
+
+    <!-- Brand -->
+    <div class="sidebar-brand">
+      <div class="brand-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="5" r="3" fill="#60a5fa"/>
+          <circle cx="5" cy="19" r="3" fill="#a78bfa"/>
+          <circle cx="19" cy="19" r="3" fill="#34d399"/>
+          <line x1="12" y1="8" x2="5" y2="16" stroke="#60a5fa" stroke-width="1.5"/>
+          <line x1="12" y1="8" x2="19" y2="16" stroke="#a78bfa" stroke-width="1.5"/>
+          <line x1="5" y1="19" x2="19" y2="19" stroke="#34d399" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">BioHybridKG</span>
+        <span class="brand-sub">Relation Extraction</span>
+      </div>
+    </div>
+
+    <!-- KG Stats -->
+    <div class="sidebar-stats">
+      <div class="sidebar-stat">
+        <span class="ss-val" id="stat-nodes">—</span>
+        <span class="ss-lbl">KG Nodes</span>
+      </div>
+      <div class="sidebar-stat-divider"></div>
+      <div class="sidebar-stat">
+        <span class="ss-val" id="stat-edges">—</span>
+        <span class="ss-lbl">KG Edges</span>
+      </div>
+      <div class="sidebar-stat-divider"></div>
+      <div class="sidebar-stat">
+        <span class="ss-val">3</span>
+        <span class="ss-lbl">Datasets</span>
+      </div>
+    </div>
+
+    <!-- Section: Query -->
+    <div class="sidebar-section">
+      <div class="section-label">
+        <span class="section-dot kg"></span>
+        Query Input
+      </div>
+
+      <div class="field">
+        <label class="field-label">Biomedical Sentence</label>
+        <textarea id="sentence-input" class="field-textarea" rows="3"
+          placeholder="e.g. aspirin inhibits cox-2 enzyme activity…"></textarea>
+      </div>
+
+      <!-- Quick Examples -->
+      <div class="examples-label">Quick examples</div>
+      <div class="example-list" id="example-list">
+        <!-- filled by JS -->
+      </div>
+    </div>
+
+    <!-- Section: KG Config -->
+    <div class="sidebar-section">
+      <div class="section-label">
+        <span class="section-dot kg"></span>
+        Knowledge Graph
+      </div>
+
+      <div class="field">
+        <label class="field-label">Dataset</label>
+        <div class="select-wrap">
+          <select id="kg-dataset" class="field-select">
+            <option value="MERGED">MERGED — all datasets</option>
+            <option value="GM_CIHT">GM_CIHT — gene / protein</option>
+            <option value="DDI">DDI — drug interactions</option>
+            <option value="CHEMPROT">CHEMPROT — chem-protein</option>
+          </select>
+          <svg class="select-arrow" viewBox="0 0 10 6"><path d="M0 0l5 6 5-6z" fill="currentColor"/></svg>
+        </div>
+      </div>
+
+      <div class="slider-field">
+        <div class="slider-row">
+          <span class="slider-name">α Source Weight</span>
+          <span class="slider-val" id="val-source">0.40</span>
+        </div>
+        <input type="range" id="source-weight" class="slider" min="0" max="1" step="0.05" value="0.4">
+      </div>
+
+      <div class="slider-field">
+        <div class="slider-row">
+          <span class="slider-name">β Similarity Weight</span>
+          <span class="slider-val" id="val-sim">0.60</span>
+        </div>
+        <input type="range" id="sim-weight" class="slider" min="0" max="1" step="0.05" value="0.6">
+      </div>
+
+      <div class="slider-field">
+        <div class="slider-row">
+          <span class="slider-name">Top-K Evidence</span>
+          <span class="slider-val" id="val-topk">8</span>
+        </div>
+        <input type="range" id="top-k" class="slider" min="1" max="20" step="1" value="8">
+      </div>
+    </div>
+
+    <!-- Section: RAG -->
+    <div class="sidebar-section">
+      <div class="section-label">
+        <span class="section-dot rag"></span>
+        RAG Chunks
+        <span class="count-badge" id="rag-count">0</span>
+      </div>
+
+      <div class="rag-scroll" id="rag-chunk-list">
+        <div class="rag-empty">No RAG chunks added yet</div>
+      </div>
+
+      <div class="rag-add-row">
+        <input type="text" id="rag-text-input" class="field-input" placeholder="Paste RAG chunk text…">
+        <input type="number" id="rag-score-input" class="field-input score-input" value="0.85" min="0" max="1" step="0.01" placeholder="Score">
+      </div>
+      <button class="btn-add-rag" id="add-rag-btn">
+        <svg width="12" height="12" viewBox="0 0 12 12"><line x1="6" y1="1" x2="6" y2="11" stroke="currentColor" stroke-width="2"/><line x1="1" y1="6" x2="11" y2="6" stroke="currentColor" stroke-width="2"/></svg>
+        Add RAG Chunk
+      </button>
+    </div>
+
+    <!-- Section: LLM -->
+    <div class="sidebar-section">
+      <div class="section-label collapsible" id="llm-toggle">
+        <span class="section-dot llm"></span>
+        LLM Config
+        <svg class="collapse-icon" id="llm-icon" viewBox="0 0 10 6" width="10"><path d="M0 0l5 6 5-6z" fill="currentColor"/></svg>
+      </div>
+      <div class="collapsible-body" id="llm-body">
+
+        <div class="field">
+          <label class="field-label">Model</label>
+          <input type="text" id="model-input" class="field-input" value="gpt-4o">
+        </div>
+        <div class="field">
+          <label class="field-label">Ground Truth <span class="optional">(optional)</span></label>
+          <input type="text" id="ground-truth-input" class="field-input" placeholder="head|RELATION|tail">
+        </div>
+      </div>
+    </div>
+
+    <!-- Run Button -->
+    <div class="sidebar-footer">
+      <button class="btn-run" id="analyze-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polygon points="5,3 19,12 5,21"/>
+        </svg>
+        Run Pipeline
+      </button>
+    </div>
+
+  </aside><!-- /sidebar -->
+
+  <!-- ═══ MAIN CONTENT ═══ -->
+  <main class="main" id="main-content">
+
+    <!-- Top bar -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="pipeline-tag kg">🔷 KG Retrieval</div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-tag rag">🟠 RAG Fusion</div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-tag llm">🤖 LLM Extraction</div>
+      </div>
+      <div class="topbar-right" id="run-status">
+        <span class="status-dot idle"></span>
+        <span class="status-text">Ready</span>
+      </div>
+    </div>
+
+    <!-- Welcome / idle state -->
+    <div class="welcome-screen" id="welcome-screen">
+      <div class="welcome-graphic">
+        <svg width="120" height="120" viewBox="0 0 120 120">
+          <defs>
+            <radialGradient id="glow-blue" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#60a5fa" stop-opacity="0.4"/>
+              <stop offset="100%" stop-color="#60a5fa" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="glow-purple" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#a78bfa" stop-opacity="0.4"/>
+              <stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <circle cx="60" cy="25" r="30" fill="url(#glow-blue)"/>
+          <circle cx="60" cy="25" r="12" fill="rgba(96,165,250,0.15)" stroke="#60a5fa" stroke-width="1.5"/>
+          <circle cx="25" cy="90" r="30" fill="url(#glow-purple)"/>
+          <circle cx="25" cy="90" r="12" fill="rgba(167,139,250,0.15)" stroke="#a78bfa" stroke-width="1.5"/>
+          <circle cx="95" cy="90" r="30" fill="url(#glow-purple)"/>
+          <circle cx="95" cy="90" r="12" fill="rgba(52,211,153,0.15)" stroke="#34d399" stroke-width="1.5"/>
+          <line x1="60" y1="37" x2="25" y2="78" stroke="#60a5fa" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.6"/>
+          <line x1="60" y1="37" x2="95" y2="78" stroke="#a78bfa" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.6"/>
+          <line x1="37" y1="90" x2="83" y2="90" stroke="#34d399" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.6"/>
+          <text x="60" y="30" text-anchor="middle" fill="#60a5fa" font-size="9" font-family="JetBrains Mono">drug</text>
+          <text x="25" y="95" text-anchor="middle" fill="#a78bfa" font-size="9" font-family="JetBrains Mono">gene</text>
+          <text x="95" y="95" text-anchor="middle" fill="#34d399" font-size="9" font-family="JetBrains Mono">protein</text>
+        </svg>
+      </div>
+      <h2 class="welcome-title">Biomedical Knowledge Extraction</h2>
+      <p class="welcome-sub">Enter a biomedical sentence in the sidebar and click <strong>Run Pipeline</strong> to retrieve evidence from the Knowledge Graph, fuse with RAG, and extract relation triples.</p>
+      <div class="welcome-tips">
+        <div class="tip">
+          <span class="tip-icon">🔷</span>
+          <span><strong>KG Branch</strong> retrieves 1-hop direct triples from GM_CIHT, DDI, and CHEMPROT knowledge graphs</span>
+        </div>
+        <div class="tip">
+          <span class="tip-icon">🟠</span>
+          <span><strong>RAG Branch</strong> adds text-based evidence chunks and scores them by cosine similarity</span>
+        </div>
+        <div class="tip">
+          <span class="tip-icon">⚡</span>
+          <span><strong>Fusion</strong> ranks all evidence using <code>α·source + β·sim</code> and keeps Top-K items</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results area (hidden until run) -->
+    <div class="results-area" id="results-area" style="display:none">
+
+      <!-- Stats strip -->
+      <div class="stats-strip" id="stats-strip">
+        <div class="stat-pill">
+          <span class="sp-icon">🎯</span>
+          <span class="sp-val" id="r-entities">—</span>
+          <span class="sp-lbl">entities</span>
+        </div>
+        <div class="stat-pill kg">
+          <span class="sp-icon">🔷</span>
+          <span class="sp-val" id="r-kg">—</span>
+          <span class="sp-lbl">KG evidence</span>
+        </div>
+        <div class="stat-pill rag">
+          <span class="sp-icon">🟠</span>
+          <span class="sp-val" id="r-rag">—</span>
+          <span class="sp-lbl">RAG chunks</span>
+        </div>
+        <div class="stat-pill">
+          <span class="sp-icon">⚡</span>
+          <span class="sp-val" id="r-topk">—</span>
+          <span class="sp-lbl">top-K kept</span>
+        </div>
+        <div class="stat-pill elapsed">
+          <span class="sp-icon">⏱</span>
+          <span class="sp-val" id="r-elapsed">—</span>
+          <span class="sp-lbl">seconds</span>
+        </div>
+        <div class="stat-pill entities-strip" id="r-entity-chips">
+          <!-- entity chips -->
+        </div>
+      </div>
+
+      <!-- Content grid -->
+      <div class="content-grid">
+
+        <!-- LEFT: Evidence -->
+        <div class="panel" id="evidence-panel">
+          <div class="panel-header">
+            <span class="panel-title">Evidence</span>
+            <div class="view-toggle" id="view-toggle">
+              <button class="vt-btn active" data-view="cards">Cards</button>
+              <button class="vt-btn" data-view="chart">Chart</button>
+            </div>
+          </div>
+
+          <!-- Cards view -->
+          <div class="evidence-cards" id="evidence-cards">
+            <!-- filled by JS -->
+          </div>
+
+          <!-- Chart view -->
+          <div class="evidence-chart" id="evidence-chart" style="display:none">
+            <div style="height:300px;position:relative">
+              <canvas id="score-chart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Graph + Triple -->
+        <div class="right-col">
+
+          <!-- KG Graph -->
+          <div class="panel" id="graph-panel">
+            <div class="panel-header">
+              <span class="panel-title">Knowledge Graph</span>
+              <span class="panel-hint">Drag nodes to explore</span>
+            </div>
+            <svg id="kg-graph-svg"></svg>
+          </div>
+
+          <!-- Triple Result -->
+          <div class="panel" id="triple-panel">
+            <div class="panel-header">
+              <span class="panel-title">Extracted Triple</span>
+              <button class="btn-extract" id="extract-btn" disabled>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polygon points="5,3 19,12 5,21"/>
+                </svg>
+                Extract via LLM
+              </button>
+            </div>
+            <div id="triple-content" class="triple-placeholder">
+              <p>Click <strong>Extract via LLM</strong> after running the pipeline</p>
+            </div>
+          </div>
+
+          <!-- Fused Context (collapsible) -->
+          <div class="panel context-panel" id="context-panel-wrap">
+            <div class="panel-header collapsible" id="context-toggle">
+              <span class="panel-title">Fused Context</span>
+              <svg class="collapse-icon" id="ctx-icon" viewBox="0 0 10 6" width="10"><path d="M0 0l5 6 5-6z" fill="currentColor"/></svg>
+            </div>
+            <div class="collapsible-body" id="context-body" style="display:none">
+              <pre id="fused-context-text" class="context-pre">—</pre>
+            </div>
+          </div>
+
+        </div><!-- /right-col -->
+      </div><!-- /content-grid -->
+    </div><!-- /results-area -->
+
+    <!-- Loading overlay -->
+    <div class="loading-screen" id="loading-screen" style="display:none">
+      <div class="loading-orb"></div>
+      <p class="loading-msg" id="loading-msg">Retrieving KG evidence…</p>
+      <div class="loading-steps">
+        <div class="ls" id="ls-1">
+          <span class="ls-dot"></span> KG 1-hop retrieval
+        </div>
+        <div class="ls" id="ls-2">
+          <span class="ls-dot"></span> Weighted fusion
+        </div>
+        <div class="ls" id="ls-3">
+          <span class="ls-dot"></span> Building context
+        </div>
+      </div>
+    </div>
+
+  </main><!-- /main -->
+
+</div><!-- /app -->
+
+<div id="toast"></div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

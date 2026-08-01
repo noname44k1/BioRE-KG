@@ -1,0 +1,5 @@
+PRODUCT-OF    chemical is a product of the gene or protein
+DOWNREGULATOR    chemical downregulates the gene or protein
+ANTAGONIST    chemical is an antagonist of the gene or protein
+AGONIST    chemical is an agonist of the gene or protein
+ACTIVATOR    chemical is an activator of the gene or protein

@@ -1,0 +1,52 @@
+# ============================================================
+# requirements_llama_env.txt
+# ============================================================
+# Môi trường cho LLaMA-7B training (trainer.py gốc)
+# Được tái tạo từ lịch sử hội thoại, dựa trên các error
+# message để suy ngược version cũ.
+#
+# Cách dùng:
+#   python3.8 -m venv llama_env
+#   source llama_env/bin/activate
+#   pip install -r requirements_llama_env.txt
+# ============================================================
+
+# ── PyTorch index (bắt buộc đặt đầu file để pip tìm được +cu118) ──
+--extra-index-url https://download.pytorch.org/whl/cu118
+
+# Core ML — CUDA 11.8 build
+torch==2.0.1+cu118
+torchaudio==2.0.2+cu118
+torchvision==0.15.2+cu118
+
+# HuggingFace stack — pinned cho LLaMA compat
+transformers==4.31.0
+datasets==2.13.0
+tokenizers==0.13.3
+accelerate==0.20.3
+safetensors==0.3.3
+
+# LoRA / SFT
+peft==0.4.0
+trl==0.4.7
+
+# Quantization — CUDA 11.8, không cần triton
+bitsandbytes==0.39.1
+
+# Utilities
+sentencepiece==0.1.99
+scipy==1.10.1
+numpy==1.24.3
+pandas==2.0.3
+pyarrow==12.0.1
+dill==0.3.6
+multiprocess==0.70.14
+xxhash==3.3.0
+fsspec==2023.6.0
+filelock==3.12.2
+packaging==23.1
+requests==2.28.2
+tqdm==4.65.0
+regex==2023.6.3
+PyYAML==6.0
+typing_extensions==4.6.3
