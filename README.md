@@ -1,14 +1,18 @@
-# BioHybridKG: A Hybrid Knowledge Graph and Retrieval-Augmented Generation Framework for Biomedical Relation Triple Extraction
+# BioRE-KG: Retrieval-Augmented Biomedical Relation Extraction via Knowledge Graph-guided Multi-hop Reasoning
 
-**BioHybridKG** (also referred to as **HybridRKG**) is an academic research thesis project that introduces a hybrid framework designed to extract high-accuracy relation triples (`subject|RELATION|object`) from unstructured biomedical literature. By synergizing the structural precision of **Knowledge Graphs (KGs)** with the semantic contextualization of **Retrieval-Augmented Generation (RAG)**, BioHybridKG addresses the limitations of hallucination and context omission in traditional Large Language Models (LLMs) applied to the biomedical domain.
+**BioRE-KG** introduces a hybrid framework designed to extract high-accuracy relation triples (`subject|RELATION|object`) from unstructured biomedical literature. By synergizing the structural precision of **Knowledge Graphs (KGs)** with the semantic contextualization of **Retrieval-Augmented Generation (RAG)**, BioRE-KG addresses the limitations of hallucination and context omission in traditional Large Language Models (LLMs) applied to the biomedical domain.
+
+### 🌐 Supplementary Material
+Supplementary file for the study:
+**[Click to open Supplementary material](/supplementary/supplementary.pdf)**
 
 ### 📍 Main Pipeline
 ![Main Pipeline](./main_pipeline.png)
 
-### 🔬 Thesis Abstract & Methodology
+### 🔬 Abstract & Methodology
 Biomedical relation extraction is a crucial task for building structured clinical databases, discovering drug-drug interactions, and understanding gene-disease pathways. However, pure RAG-based systems suffer from noisy text retrieval, while pure KG-based systems lack the contextual understanding of textual discourse. 
 
-BioHybridKG solves this by implementing a dual-pathway architecture:
+BioRE-KG solves this by implementing a dual-pathway architecture:
 1. **Structured KG Path (Direct Evidence):** Compiles dataset facts into a graph structure (using NetworkX) and retrieves 1-hop relational paths for target entities.
 2. **Unstructured RAG Path (Contextual Evidence):** Extracts semantic context chunks from input text, maps them to relation candidates, and embeds them using dense retrievers.
 3. **Evidence Fusion Module:** Applies a specialized weighting function to score and merge KG paths and RAG context chunks. The hybrid context is prioritized by:
@@ -405,6 +409,8 @@ python -m uvicorn app.backend.main:app --reload --host 127.0.0.1 --port 8000
 ### 🌐 Accessing the UI
 Open your web browser and navigate to:
 **[http://127.0.0.1:8000](http://127.0.0.1:8000)**
+
+**[Link to online web application (Huggingface)](https://huggingface.co/spaces/ntmp1910/HybridRKG_demo)**
 
 #### Web UI Key Features:
 *   **Query Input panel:** Enter custom biomedical text or click on preloaded preset examples (e.g., Warfarin, Metformin).
