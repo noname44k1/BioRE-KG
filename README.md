@@ -17,7 +17,7 @@ BioRE-KG solves this by implementing a dual-pathway architecture:
 2. **Unstructured RAG Path (Contextual Evidence):** Extracts semantic context chunks from input text, maps them to relation candidates, and embeds them using dense retrievers.
 3. **Evidence Fusion Module:** Applies a specialized weighting function to score and merge KG paths and RAG context chunks. The hybrid context is prioritized by:
    $$\text{FinalScore}(e) = \alpha \cdot \text{SourceScore}(e) + \beta \cdot \text{CosineSimilarity}(e.\text{text}, \text{query})$$
-   *Where $\alpha$ and $\beta$ represent source and similarity weights respectively.*
+   Where $\alpha$ and $\beta$ represent source and similarity weights respectively.
 4. **LoRA Fine-tuned LLM Extraction:** Feeds the top-k fused contexts into fine-tuned LLMs (specifically **BioMistral-7B** and **LLaMA-7B** using Low-Rank Adaptation) to generate formatted relation triples.
 
 This repository contains the complete pipeline for data preprocessing, KG construction, RAG chunk extraction, model training, evidence fusion, and evaluation, as well as an interactive web application to visualize the pipeline's execution.
