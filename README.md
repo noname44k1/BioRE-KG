@@ -376,7 +376,7 @@ python generate_triple_model+eval/eval_new.py
 
 ![Interactive Web Demo](./BioRE-KG.png)
 
-🌐**[Link to online web application (Huggingface)](https://huggingface.co/spaces/ntmp1910/HybridRKG_demo)**
+🌐 **[Link to online web application (Huggingface)](https://huggingface.co/spaces/ntmp1910/HybridRKG_demo)**
 
 The demo app provides a visually rich dashboard to input a sentence, retrieve structured 1-hop facts, score and rank them, and extract relation triples via an LLM.
 
