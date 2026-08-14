@@ -2,7 +2,7 @@
 
 **BioRE-KG** introduces a hybrid framework designed to extract high-accuracy relation triples (`subject|RELATION|object`) from unstructured biomedical literature. By synergizing the structural precision of **Knowledge Graphs (KGs)** with the semantic contextualization of **Retrieval-Augmented Generation (RAG)**, BioRE-KG addresses the limitations of hallucination and context omission in traditional Large Language Models (LLMs) applied to the biomedical domain.
 
-### 🌐 Supplementary Material
+### 📄 Supplementary Material
 Supplementary file for the study:
 **[Click to open Supplementary material](/supplementary/supplementary.pdf)**
 
@@ -376,6 +376,8 @@ python generate_triple_model+eval/eval_new.py
 
 ![Interactive Web Demo](./BioRE-KG.png)
 
+**[Link to online web application (Huggingface)](https://huggingface.co/spaces/ntmp1910/HybridRKG_demo)**
+
 The demo app provides a visually rich dashboard to input a sentence, retrieve structured 1-hop facts, score and rank them, and extract relation triples via an LLM.
 
 ### 🔌 Backend API Configuration
@@ -409,8 +411,6 @@ python -m uvicorn app.backend.main:app --reload --host 127.0.0.1 --port 8000
 ### 🌐 Accessing the UI
 Open your web browser and navigate to:
 **[http://127.0.0.1:8000](http://127.0.0.1:8000)**
-
-**[Link to online web application (Huggingface)](https://huggingface.co/spaces/ntmp1910/HybridRKG_demo)**
 
 #### Web UI Key Features:
 *   **Query Input panel:** Enter custom biomedical text or click on preloaded preset examples (e.g., Warfarin, Metformin).
