@@ -4,7 +4,10 @@
 
 ### 📄 Supplementary Material
 Supplementary file for the study:
-**[Click to open Supplementary material](/supplementary/supplementary.pdf)**
+**[Click to open](/supplementary/supplementary.pdf)**
+
+CSV file for statistical experiments:
+**[Click to open](/supplementary/supplementary.pdf)**
 
 ### 📍 Main Pipeline
 ![Main Pipeline](./main_pipeline.png)
