@@ -7,8 +7,7 @@ Supplementary file for the study:
 **[Click to open](/supplementary/supplementary.pdf)**
 
 CSV file for statistical experiments:
-**[Click to open](/result/statistical_experiment.csv)**
-. Std (Standard Deviation): Measures the dispersion or fluctuation of results across runs; a lower value indicates higher execution stability.
+**[Click to open](/result/statistical_experiment.csv)**. Std (Standard Deviation): Measures the dispersion or fluctuation of results across runs; a lower value indicates higher execution stability.
 CI (Confidence Interval): The estimated range for the overall mean based on a probability distribution with a 95% confidence level.
 Bootstrap CI: A non-parametric confidence interval calculated using resampling with replacement,  reflecting the true empirical distribution of small sample sizes without relying on normality assumptions).
 
