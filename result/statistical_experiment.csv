@@ -215,8 +215,3 @@ chemprot,Llama7B+RAG+KG SINGLE,Tail_F1,83.34,6.94,66.11,100.57,78.52,91.29
 chemprot,Llama7B+RAG+KG SINGLE,Relation_Prec,91.28,0.4,90.29,92.26,90.89,91.68
 chemprot,Llama7B+RAG+KG SINGLE,Relation_Rec,88.6,2.32,82.83,94.38,85.92,89.96
 chemprot,Llama7B+RAG+KG SINGLE,Relation_F1,89.9,1.05,87.31,92.5,88.7,90.59
-,,,,,,,,
-,,,,,,,,
-Std (Standard Deviation): Measures the dispersion or fluctuation of results across runs; a lower value indicates higher execution stability.,,,,,,,,
-CI (Confidence Interval): The estimated range for the overall mean based on a probability distribution with a 95% confidence level.,,,,,,,,
-"Bootstrap CI: A non-parametric confidence interval calculated using resampling with replacement,  reflecting the true empirical distribution of small sample sizes without relying on normality assumptions.",,,,,,,,
