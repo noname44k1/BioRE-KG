@@ -7,7 +7,7 @@ Supplementary file for the study:
 **[Click to open](/supplementary/supplementary.pdf)**
 
 CSV file for statistical experiments:
-**[Click to open](/supplementary/supplementary.pdf)**
+**[Click to open](/result/statistical_experiment.csv)**
 
 ### 📍 Main Pipeline
 ![Main Pipeline](./main_pipeline.png)
